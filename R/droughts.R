@@ -20,6 +20,11 @@
 #' * `drought_events`: only the rows that are part of drought events (duration ≥ 2).
 #' * `drought_assessment`: summary of each event, including duration, intensity, severity, and timing.
 #'
+#' @examples
+#' data(spei)
+#' # Detect droughts in the SPEI-12 time series with a threshold of -1.28
+#' droughts_result <- droughts(spei, vname = "spei12", threshold = -1.28)
+#'
 #' @importFrom assertthat assert_that
 #' @importFrom lubridate make_date month year
 #' @importFrom dplyr mutate group_by summarise filter ungroup
@@ -87,10 +92,18 @@ droughts <- function(df, vname, threshold) {
       .groups = "drop"
     )
 
-  return(list(data = events_computation,
-              drought_events = is_drought_event,
-              drought_assessment = da))
+  out <- list(
+    data = events_computation,
+    drought_events = is_drought_event,
+    drought_assessment = da)
+
+  class(out) <- c("droughts", "list")
+
+  return(out)
 }
+
+
+
 
 
 

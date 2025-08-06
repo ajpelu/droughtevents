@@ -32,3 +32,9 @@ Identifies drought events in a time series when a given index (e.g., SPEI) falls
 for at least two consecutive months. Returns the processed dataset, the detected drought events,
 and a summary of their characteristics.
 }
+\examples{
+data(spei)
+# Detect droughts in the SPEI-12 time series with a threshold of -1.28
+droughts_result <- droughts(spei, vname = "spei12", threshold = -1.28)
+
+}

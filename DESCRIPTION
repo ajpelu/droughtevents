@@ -1,0 +1,14 @@
+Package: droughtevents
+Title: Identify and Characterize Drought Events from Drought Index Time Series
+Version: 0.0.0.9000
+Authors@R: 
+    person("Antonio Jesus", "Perez-Luque", , "ajpelu@gmail.com", role = c("cre", "aut", "cph"),
+           comment = c(ORCID = "0000-0002-1747-0469"))
+Description: Provides tools to detect, describe, and analyze drought events from time series of drought indices (e.g. SPEI, SPI). The package identifies drought episodes based on threshold values and calculates their duration, intensity, severity, and peak month. Includes utilities for summarizing and visualizing drought dynamics over time.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

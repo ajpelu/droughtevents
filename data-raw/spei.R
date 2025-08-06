@@ -10,8 +10,9 @@ all <- list.files("data-raw", pattern = "\\.csv$", full.names = FALSE)
 spei <- all |>
   purrr::map(~ readr::read_delim(file.path("data-raw", .x), delim = ";", show_col_types = FALSE)) |>
   purrr::reduce(dplyr::full_join, by = "dates") |>
-  dplyr::rename(spei6 = spei06) |>
-  dplyr::relocate(spei6, .after = dates) |>
+  dplyr::rename(spei6 = spei06,
+                date = dates) |>
+  dplyr::relocate(spei6, .after = date) |>
   dplyr::filter(!is.na(spei6))
 
 usethis::use_data(spei, overwrite = TRUE)

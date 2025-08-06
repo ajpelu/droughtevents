@@ -14,3 +14,8 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://github.com/ajpelu/droughtevents
 BugReports: https://github.com/ajpelu/droughtevents/issues
+Imports: 
+    data.table,
+    dplyr,
+    glue,
+    lubridate

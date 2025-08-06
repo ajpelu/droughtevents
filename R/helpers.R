@@ -16,3 +16,10 @@
     msg = "Data frame must contain 'year' and 'month' columns, or a 'date' column of class Date or POSIXct."
   )
 }
+
+#' @export
+print.droughts <- function(x, ...) {
+  cat("Drought Assessment Summary:\n")
+  print(x$drought_assessment, ...)
+  invisible(x)
+}

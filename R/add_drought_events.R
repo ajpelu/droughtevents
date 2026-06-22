@@ -60,7 +60,7 @@ add_drought_events <- function(p,
   missing_cols <- setdiff(required_cols, names(drought_assessment))
   if (length(missing_cols) > 0) {
     cli::cli_abort(c(
-      "{.arg drought_assessment} is missing required column{?s}:",
+      "{.arg drought_assessment} is missing required {cli::qty(missing_cols)} column{?s}:",
       "*" = "{.field {missing_cols}}"
     ))
   }

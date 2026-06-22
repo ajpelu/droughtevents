@@ -27,7 +27,8 @@
 #' @importFrom rlang .data
 #' @export
 
-add_drought_events <- function(p, drought_assessment,
+add_drought_events <- function(p,
+                               drought_assessment,
                                which_events = c("all", "top"),
                                metric = c("duration", "severity", "intensity", "lowest_index"),
                                top_n = 5,
@@ -43,16 +44,47 @@ add_drought_events <- function(p, drought_assessment,
   metric <- match.arg(metric)
   type <- match.arg(type)
 
-  # Calculate date range of drought events
-  x <- drought_assessment |>
-    dplyr::mutate(
-      start_date = lubridate::make_date(.data$minyear, .data$month_peak, 1),
-      end_date = .data$start_date %m+% months(.data$d_duration - 1)
-    )
+  if (!ggplot2::is.ggplot(p)) {
+    cli::cli_abort("{.arg p} must be a ggplot object created by {.fn plot_drought_ts}.")
+  }
 
+  if (!inherits(drought_assessment, "data.frame")) {
+    cli::cli_abort("{.arg drought_assessment} must be a data frame or tibble")
+  }
 
+  if (nrow(drought_assessment) == 0) {
+    cli::cli_abort("{.arg drought_assessment} has no rows. There is nothing to plot.")
+  }
 
-  # Top events filtering
+  required_cols <- c("minyear", "month_peak", "d_duration")
+  missing_cols <- setdiff(required_cols, names(drought_assessment))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "{.arg drought_assessment} is missing required column{?s}:",
+      "*" = "{.field {missing_cols}}"
+    ))
+  }
+
+  if (!is.numeric(pol_alpha)) {
+    cli::cli_abort("{.arg pol_alpha} must be a number between 0 and 1, not {.val {pol_alpha}}.")
+  }
+  if (pol_alpha < 0 || pol_alpha > 1) {
+    cli::cli_abort("{.arg pol_alpha} must be a number between 0 and 1, not {.val {pol_alpha}}.")
+  }
+
+  if (!is.logical(show_severity) || is.na(show_severity)) {
+    cli::cli_abort("{.arg show_severity} must be {.val TRUE} or {.val FALSE}.")
+  }
+
+  if (!is.character(line_col) || length(line_col) != 1) {
+    cli::cli_abort("{.arg line_col} must be a single character string (a valid color).")
+  }
+
+  if (!is.character(pol_fill) || length(pol_fill) != 1) {
+    cli::cli_abort("{.arg pol_fill} must be a single character string (a valid color).")
+  }
+
+  # check column for top events filtering
   if (which_events == "top") {
     metric_col <- switch(metric,
                          duration = "d_duration",
@@ -61,7 +93,44 @@ add_drought_events <- function(p, drought_assessment,
                          lowest_index = "lowest_spei"
     )
 
-    # Use max or min depending on metric
+    if (!metric_col %in% names(drought_assessment)) {
+      cli::cli_abort(
+        "Metric {.val {metric}} requires column {.field {metric_col}}, which is not present in {.arg drought_assessment}."
+      )
+    }
+
+    if (!is.numeric(top_n) || length(top_n) != 1) {
+      cli::cli_abort("{.arg top_n} must be a single positive integer.")
+    }
+
+    if (top_n <= 0 || top_n %% 1 != 0) {
+      cli::cli_abort("{.arg top_n} must be a positive integer, not {.val {top_n}}.")
+    }
+
+    if (top_n > nrow(drought_assessment)) {
+      cli::cli_abort(
+        "{.arg top_n} must be less than or equal to the number of drought events in {.arg drought_assessment}."
+      )
+    }
+  }
+
+  # check column for severity labels
+  if (show_severity && !"d_severity" %in% names(drought_assessment)) {
+    cli::cli_abort(
+      "{.code show_severity = TRUE} requires a {.field d_severity} column in {.arg drought_assessment}."
+    )
+  }
+
+
+  # Calculate date range of drought events
+  x <- drought_assessment |>
+    dplyr::mutate(
+      start_date = lubridate::make_date(.data$minyear, .data$month_peak, 1),
+      end_date = .data$start_date %m+% months(.data$d_duration - 1)
+    )
+
+  # Top events filtering. Use max or min depending on metric
+  if (which_events == "top") {
     x <- if (metric %in% c("duration", "severity")) {
       dplyr::slice_max(x, .data[[metric_col]], n = top_n)
     } else {
@@ -76,7 +145,7 @@ add_drought_events <- function(p, drought_assessment,
     1  # fallback if not plottable yet
   })
 
-  # Add the graphical elements
+  # Add the plot elements
   for (i in seq_len(nrow(x))) {
     if (type %in% c("polygon", "both")) {
       p <- p + ggplot2::annotate(

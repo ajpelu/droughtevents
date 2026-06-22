@@ -153,4 +153,59 @@ test_that("pol_alpha is a number within 0 and 1 both included", {
   )
 })
 
+test_that("show_severity is TRUE or FALSE", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      show_severity = "no"
+    ),
+    'must be "TRUE" or "FALSE"'
+  )
+})
+
+test_that("show_severity error if NA", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      show_severity = NA
+    ),
+    'must be "TRUE" or "FALSE"'
+  )
+})
+
+test_that("show_severity errors if length is greater than 1", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      show_severity = c(TRUE, FALSE)
+    ),
+    'must be "TRUE" or "FALSE"'
+  )
+})
+
+test_that("line_col is a string", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      line_col = 1
+    ),
+    "must be a single character string"
+  )
+})
+
+test_that("line_col error if length is greater than 1", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      line_col = c("black", "green")
+    ),
+    "must be a single character string"
+  )
+})
+
 

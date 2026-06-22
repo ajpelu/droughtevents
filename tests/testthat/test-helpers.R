@@ -61,3 +61,34 @@ test_that(".check_date errors if date column exists but is not Date/POSIXct", {
     "must contain.*year.*month.*date"
   )
 })
+
+
+
+make_drought_result <- function() {
+  df <- data.frame(
+    year  = rep(1990:1992, each = 12),
+    month = rep(1:12, times = 3),
+    index = c(
+      0, 0, 0, 0, -2, -2, -2, 0, 0, 0, 0, 0,   # 1990: drought at months 5-7
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,       # 1991: no drought
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0        # 1992: no drought
+    )
+  )
+  droughts(df, vname = "index", threshold = -1)
+}
+
+test_that("print.droughts prints the summary header", {
+  result <- make_drought_result()
+  expect_output(print(result), "Drought Assessment Summary:")
+})
+
+test_that("print.droughts prints the drought_assessment content", {
+  result <- make_drought_result()
+  # minyear = 1990 should appear in the printed table
+  expect_output(print(result), "1990")
+})
+
+test_that("print.droughts returns x invisibly", {
+  result <- make_drought_result()
+  expect_invisible(print(result))
+})

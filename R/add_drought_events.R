@@ -44,7 +44,7 @@ add_drought_events <- function(p,
   metric <- match.arg(metric)
   type <- match.arg(type)
 
-  if (!ggplot2::is.ggplot(p)) {
+  if (!ggplot2::is_ggplot(p)) {
     cli::cli_abort("{.arg p} must be a ggplot object created by {.fn plot_drought_ts}.")
   }
 
@@ -109,7 +109,7 @@ add_drought_events <- function(p,
 
     if (top_n > nrow(drought_assessment)) {
       cli::cli_abort(
-        "{.arg top_n} must be less than or equal to the number of drought events in {.arg drought_assessment}."
+        "{.arg top_n} must be less than or equal to the number of drought events in {.arg drought_assessment}. Currently {.val {nrow(drought_assessment)}} drought events."
       )
     }
   }
@@ -120,7 +120,6 @@ add_drought_events <- function(p,
       "{.code show_severity = TRUE} requires a {.field d_severity} column in {.arg drought_assessment}."
     )
   }
-
 
   # Calculate date range of drought events
   x <- drought_assessment |>

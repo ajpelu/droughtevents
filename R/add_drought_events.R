@@ -72,7 +72,7 @@ add_drought_events <- function(p,
     cli::cli_abort("{.arg pol_alpha} must be a number between 0 and 1, not {.val {pol_alpha}}.")
   }
 
-  if (!is.logical(show_severity) || is.na(show_severity)) {
+  if (!is.logical(show_severity) || length(show_severity) != 1 || is.na(show_severity)) {
     cli::cli_abort("{.arg show_severity} must be {.val TRUE} or {.val FALSE}.")
   }
 

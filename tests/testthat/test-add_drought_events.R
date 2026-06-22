@@ -208,4 +208,26 @@ test_that("line_col error if length is greater than 1", {
   )
 })
 
+test_that("pol_fill is a string", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      pol_fill = 1
+    ),
+    "must be a single character string"
+  )
+})
+
+test_that("pol_fill error if length is greater than 1", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      pol_fill = c("black", "green")
+    ),
+    "must be a single character string"
+  )
+})
+
 

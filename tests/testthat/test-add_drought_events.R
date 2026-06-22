@@ -119,5 +119,38 @@ test_that("top_n is higher than drought events", {
   )
 })
 
+test_that("pol_alpha is a number", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      which_events = "all",
+      pol_alpha = "number"
+    ),
+    "must be a number"
+  )
+})
+
+test_that("pol_alpha is a number within 0 and 1 both included", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      pol_alpha = -.5
+    ),
+    "must be a number between 0 and 1"
+  )
+})
+
+test_that("pol_alpha is a number within 0 and 1 both included", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      pol_alpha = 1.5
+    ),
+    "must be a number between 0 and 1"
+  )
+})
 
 

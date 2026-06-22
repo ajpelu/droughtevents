@@ -20,3 +20,53 @@ make_drought_assessment <- function() {
     lowest_spei  = c(-1.5, -2.3, -0.9)
   )
 }
+
+
+test_that("p is not a ggplot object", {
+  expect_error(
+    add_drought_events(p = "not a plot", drought_assessment = make_drought_assessment()),
+    "must be a ggplot object"
+  )
+})
+
+test_that("drought_assessment is not a data frame", {
+  expect_error(
+    add_drought_events(p = make_base_plot(), drought_assessment = list(a = 1)),
+    "must be a data frame or tibble"
+  )
+})
+
+test_that("drought_assessment has zero rows", {
+  empty_df <- make_drought_assessment()[0, ]
+  expect_error(
+    add_drought_events(p = make_base_plot(), drought_assessment = empty_df),
+    "has no rows"
+  )
+})
+
+test_that("drought_assesment has required names col",{
+  x <- make_drought_assessment()
+  names(x)[names(x) == "minyear"] <- "year"
+  expect_error(
+    add_drought_events(p = make_base_plot(), drought_assessment = x),
+    "missing required column"
+  )
+})
+
+test_that("drought_assesment has required names col",{
+  x <- make_drought_assessment()
+  names(x)[names(x) == "month_peak"] <- "mp"
+  expect_error(
+    add_drought_events(p = make_base_plot(), drought_assessment = x),
+    "missing required column"
+  )
+})
+
+test_that("drought_assesment has required names col",{
+  x <- make_drought_assessment()
+  names(x)[names(x) == "d_duration"] <- "duration"
+  expect_error(
+    add_drought_events(p = make_base_plot(), drought_assessment = x),
+    "missing required column"
+  )
+})

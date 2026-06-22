@@ -70,3 +70,54 @@ test_that("drought_assesment has required names col",{
     "missing required column"
   )
 })
+
+test_that("top_n is not numeric", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      which_events = "top",
+      top_n = "five"
+    ),
+    "positive integer"
+  )
+})
+
+test_that("top_n is below 0", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      which_events = "top",
+      top_n = -1
+    ),
+    "positive integer"
+  )
+})
+
+test_that("top_n is not a whole number", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      which_events = "top",
+      top_n = 2.5
+    ),
+    "positive integer"
+  )
+})
+
+test_that("top_n is higher than drought events", {
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = make_drought_assessment(),
+      which_events = "top",
+      top_n = 5
+    ),
+    "less than or equal to the number of drought events"
+  )
+})
+
+
+

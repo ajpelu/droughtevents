@@ -1,4 +1,9 @@
 .check_date <- function(df) {
+
+  if (!inherits(df, "data.frame")) {
+    cli::cli_abort("{.arg df} must be a data frame or tibble")
+  }
+
   # check year and month columns
   if (all(c("year", "month") %in% names(df))) {
     return(df)
@@ -11,10 +16,10 @@
   }
 
   # error if neither condition is met
-  assertthat::assert_that(
-    FALSE,
-    msg = "Data frame must contain 'year' and 'month' columns, or a 'date' column of class Date or POSIXct."
+  cli::cli_abort(
+    "{.arg df} must contain {.field year} and {.field month} columns, or a {.field date} column of class {.cls Date} or {.cls POSIXct}."
   )
+
 }
 
 #' @export

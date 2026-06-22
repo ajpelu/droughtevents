@@ -293,5 +293,124 @@ test_that("errors if the metric column is missing, for each metric option", {
 })
 
 
+test_that("type = 'line' adds one layer per drought event", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  result <- add_drought_events(p, da, type = "line")
+  expect_equal(length(result$layers) - length(p$layers), nrow(da))
+})
 
+test_that("type = 'polygon' adds one layer per drought event", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  result <- add_drought_events(p, da, type = "polygon")
+  expect_equal(length(result$layers) - length(p$layers), nrow(da))
+})
 
+test_that("type = 'both' adds two layers per drought event", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  result <- add_drought_events(p, da, type = "both")
+  expect_equal(length(result$layers) - length(p$layers), 2 * nrow(da))
+})
+
+test_that("show_severity = TRUE adds two extra layers per event", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  result_without <- add_drought_events(p, da, type = "line", show_severity = FALSE)
+  result_with    <- add_drought_events(p, da, type = "line", show_severity = TRUE)
+  expect_equal(
+    length(result_with$layers) - length(result_without$layers),
+    2 * nrow(da)
+  )
+})
+
+test_that("which_events = 'top' keeps only top_n events", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  result <- add_drought_events(p, da,
+    which_events = "top",
+    metric = "severity",
+    top_n = 2,
+    type = "line"
+  )
+  expect_equal(length(result$layers) - length(p$layers), 2)
+})
+
+test_that("pol_alpha accepts the boundary values 0 and 1 without error", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  expect_no_error(add_drought_events(p, da, pol_alpha = 0))
+  expect_no_error(add_drought_events(p, da, pol_alpha = 1))
+})
+
+test_that("show_severity accepts TRUE and FALSE without error", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  expect_no_error(add_drought_events(p, da, show_severity = TRUE))
+  expect_no_error(add_drought_events(p, da, show_severity = FALSE))
+})
+
+test_that("top_n equal to the number of available events is valid", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()  # 3 eventos
+  expect_no_error(
+    add_drought_events(p, da, which_events = "top", top_n = 3)
+  )
+})
+
+test_that("line_col and pol_fill accept valid single color strings", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  expect_no_error(add_drought_events(p, da, line_col = "red", pol_fill = "blue"))
+})
+
+test_that("which_events = 'top' actually keeps the highest-severity events", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  # severity: 1990 -> 1.5, 1995 -> 3.2, 2000 -> 0.8
+
+  result <- add_drought_events(
+    p, da,
+    which_events = "top",
+    metric = "severity",
+    top_n = 2,
+    type = "line"
+  )
+
+  new_layers <- result$layers[(length(p$layers) + 1):length(result$layers)]
+  plotted_dates <- vapply(new_layers, function(l) as.character(l$data$x), character(1))
+
+  # The most severity events are 1995-07 (3.2) and 1990-03 (1.5)
+  expect_setequal(plotted_dates, c("1995-07-01", "1990-03-01"))
+
+  # The less severity events is 2000-11 (0.8)
+  expect_false("2000-11-01" %in% plotted_dates)
+})
+
+test_that("metric = 'lowest_index' works in the happy path", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  expect_no_error(
+    add_drought_events(p, da, which_events = "top", metric = "lowest_index", top_n = 2, type = "line")
+  )
+})
+
+test_that("which_events = 'top', type = 'both', and show_severity = TRUE work together", {
+  p <- make_base_plot()
+  da <- make_drought_assessment()
+  result <- add_drought_events(
+    p, da,
+    which_events = "top",
+    metric = "duration",
+    top_n = 2,
+    type = "both",
+    show_severity = TRUE
+  )
+
+  # top_n = 2 events .
+  # type = "both" -> 2 layers (rect + segment) per event .
+  # show_severity = TRUE -> 2 extra layer (point + text) per evento.
+  # Total expected: 2 events x (2 + 2) layer = 8.
+  expect_equal(length(result$layers) - length(p$layers), 8)
+})

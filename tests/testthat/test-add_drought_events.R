@@ -29,6 +29,14 @@ test_that("p is not a ggplot object", {
   )
 })
 
+test_that("returns a ggplot object on valid input", {
+  result <- add_drought_events(
+    p = make_base_plot(),
+    drought_assessment = make_drought_assessment()
+  )
+  expect_s3_class(result, "ggplot")
+})
+
 test_that("drought_assessment is not a data frame", {
   expect_error(
     add_drought_events(p = make_base_plot(), drought_assessment = list(a = 1)),
@@ -44,7 +52,7 @@ test_that("drought_assessment has zero rows", {
   )
 })
 
-test_that("drought_assesment has required names col",{
+test_that("drought_assessment has required names col minyear",{
   x <- make_drought_assessment()
   names(x)[names(x) == "minyear"] <- "year"
   expect_error(
@@ -53,7 +61,7 @@ test_that("drought_assesment has required names col",{
   )
 })
 
-test_that("drought_assesment has required names col",{
+test_that("drought_assessment has required names col month_peak",{
   x <- make_drought_assessment()
   names(x)[names(x) == "month_peak"] <- "mp"
   expect_error(
@@ -62,7 +70,7 @@ test_that("drought_assesment has required names col",{
   )
 })
 
-test_that("drought_assesment has required names col",{
+test_that("drought_assessment has required names col d_duration",{
   x <- make_drought_assessment()
   names(x)[names(x) == "d_duration"] <- "duration"
   expect_error(
@@ -131,7 +139,7 @@ test_that("pol_alpha is a number", {
   )
 })
 
-test_that("pol_alpha is a number within 0 and 1 both included", {
+test_that("pol_alpha is a number within 0 and 1 both included (lower than 0)", {
   expect_error(
     add_drought_events(
       p = make_base_plot(),
@@ -142,7 +150,7 @@ test_that("pol_alpha is a number within 0 and 1 both included", {
   )
 })
 
-test_that("pol_alpha is a number within 0 and 1 both included", {
+test_that("pol_alpha is a number within 0 and 1 both included (higher than 1)", {
   expect_error(
     add_drought_events(
       p = make_base_plot(),
@@ -229,5 +237,61 @@ test_that("pol_fill error if length is greater than 1", {
     "must be a single character string"
   )
 })
+
+
+test_that("show_severity = TRUE requires a d_severity column", {
+  da <- make_drought_assessment()
+  da$d_severity <- NULL
+
+  expect_error(
+    add_drought_events(
+      p = make_base_plot(),
+      drought_assessment = da,
+      show_severity = TRUE
+    ),
+    "requires a.*d_severity.*column"
+  )
+})
+
+
+test_that("errors if the metric column is missing, for each metric option", {
+  base_da <- make_drought_assessment()
+  p <- make_base_plot()
+
+  # duration -> d_duration es una columna OBLIGATORIA desde el principio,
+  # así que su ausencia dispara el check de required_cols, no el de metric_col
+  da <- base_da
+  da$d_duration <- NULL
+  expect_error(
+    add_drought_events(p, da, which_events = "top", metric = "duration"),
+    "missing required column"
+  )
+
+  # severity -> d_severity (no es obligatoria de entrada, así que SÍ llega al check de metric_col)
+  da <- base_da
+  da$d_severity <- NULL
+  expect_error(
+    add_drought_events(p, da, which_events = "top", metric = "severity"),
+    "requires column.*d_severity"
+  )
+
+  # intensity -> d_intensity
+  da <- base_da
+  da$d_intensity <- NULL
+  expect_error(
+    add_drought_events(p, da, which_events = "top", metric = "intensity"),
+    "requires column.*d_intensity"
+  )
+
+  # lowest_index -> lowest_spei
+  da <- base_da
+  da$lowest_spei <- NULL
+  expect_error(
+    add_drought_events(p, da, which_events = "top", metric = "lowest_index"),
+    "requires column.*lowest_spei"
+  )
+})
+
+
 
 

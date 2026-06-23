@@ -45,11 +45,11 @@ droughts <- function(df, vname, threshold, min_duration = 2) {
     }
 
   if (!is.numeric(threshold)) {
-    cli::cli_abort("Threshold must be a numeric value.")
+    cli::cli_abort("{.arg threshold} must be a numeric value.")
   }
 
   if (!is.numeric(min_duration)) {
-    cli::cli_abort("{.arg {min_duration}} must be a numeric value.")
+    cli::cli_abort("{.arg min_duration} must be a numeric value.")
   }
 
   df <- .check_date(df)
@@ -71,23 +71,38 @@ droughts <- function(df, vname, threshold, min_duration = 2) {
   is_drought_event <- events_computation |>
     dplyr::filter(drought_duration >= min_duration)
 
-  da <- is_drought_event |>
-    dplyr::group_by(index_events) |>
-    dplyr::summarise(
-      d_duration = unique(drought_duration),
-      d_intensity = mean(.data[[vname]], na.rm = TRUE),
-      d_severity = sum(abs(.data[[vname]]), na.rm = TRUE),
-      lowest_spei = min(.data[[vname]]),
-      month_peak = month[which.min(.data[[vname]])],
-      minyear = min(year),
-      maxyear = max(year),
-      rangeDate = paste(
-        format(min(date, na.rm = TRUE), "%b"),
-        "-",
-        format(max(date, na.rm = TRUE), "%b")
-      ),
-      .groups = "drop"
+  if (nrow(is_drought_event) == 0) {
+    # No events detected, build empty summary with the right columns
+    da <- data.frame(
+      index_events = integer(0),
+      d_duration = numeric(0),
+      d_intensity = numeric(0),
+      d_severity = numeric(0),
+      lowest_spei = numeric(0),
+      month_peak = integer(0),
+      minyear = integer(0),
+      maxyear = integer(0),
+      rangeDate = character(0)
     )
+  } else {
+    da <- is_drought_event |>
+      dplyr::group_by(index_events) |>
+      dplyr::summarise(
+        d_duration = unique(drought_duration),
+        d_intensity = mean(.data[[vname]], na.rm = TRUE),
+        d_severity = sum(abs(.data[[vname]]), na.rm = TRUE),
+        lowest_spei = min(.data[[vname]]),
+        month_peak = month[which.min(.data[[vname]])],
+        minyear = min(year),
+        maxyear = max(year),
+        rangeDate = paste(
+          format(min(date, na.rm = TRUE), "%b"),
+          "-",
+          format(max(date, na.rm = TRUE), "%b")
+        ),
+        .groups = "drop"
+      )
+  }
 
   out <- list(
     data = events_computation,

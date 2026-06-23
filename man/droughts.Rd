@@ -4,7 +4,7 @@
 \alias{droughts}
 \title{Detect and Summarize Drought Events from Droughts Index Time Series}
 \usage{
-droughts(df, vname, threshold)
+droughts(df, vname, threshold, min_duration = 2)
 }
 \arguments{
 \item{df}{A \code{data.frame} or \code{tibble} containing the time series data.
@@ -18,6 +18,9 @@ Must include either:
 \item{vname}{A string indicating the name of the numeric column to be evaluated (e.g., \code{"spei12"}).}
 
 \item{threshold}{A numeric threshold below which values are considered part of a drought event.}
+
+\item{min_duration}{Minimum number of consecutive months below \code{threshold} required for an
+event to be considered a drought. Default is 2.}
 }
 \value{
 A named list with three elements:

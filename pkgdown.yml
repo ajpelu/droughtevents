@@ -2,7 +2,7 @@ pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2026-06-24T20:54Z
+last_built: 2026-06-24T20:56Z
 urls:
   reference: https://ajpelu.github.io/droughtevents/reference
   article: https://ajpelu.github.io/droughtevents/articles

@@ -1,4 +1,4 @@
-# droughtevents
+## **dRought****events** [![droughtevents website](reference/figures/logo.png)](https://ajpelu.github.io/droughtevents/)
 
 ## Overview
 

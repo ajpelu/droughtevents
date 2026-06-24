@@ -16,39 +16,106 @@ knitr::opts_chunk$set(
 # droughtevents
 
 <!-- badges: start -->
+<!-- [![R-CMD-check](https://github.com/ajpelu/droughtevents/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ajpelu/droughtevents/actions/workflows/R-CMD-check.yaml) -->
+<!-- [![Codecov test coverage](https://codecov.io/gh/ajpelu/droughtevents/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ajpelu/droughtevents?branch=main) -->
 <!-- badges: end -->
 
-The goal of droughtevents is to ...
+## Overview
+
+`droughtevents` provides tools to detect, summarize, and visualize drought
+events from drought-related index time series (e.g., SPEI, SPI). Given a
+time series and a threshold, the package identifies periods of sustained
+below-threshold values, computes summary statistics for each event
+(duration, intensity, severity, timing), and offers `ggplot2`-based
+plotting functions to visualize the time series and highlight the
+detected events.
 
 ## Installation
 
-You can install the development version of droughtevents like so:
+You can install the development version of `droughtevents` from
+[GitHub](https://github.com/) with:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("remotes")
+remotes::install_github("ajpelu/droughtevents")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+## Usage
 
 ```{r example}
 library(droughtevents)
-## basic example code
+library(ggplot2)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+### Detect drought events
 
-```{r cars}
-summary(cars)
+`droughts()` identifies drought events in a time series when a given
+index falls below a specified threshold for at least `min_duration`
+consecutive months (2 by default).
+
+```{r detect-droughts}
+data(spei_granada)
+
+result <- droughts(spei_granada, vname = "spei12", threshold = -1.28)
+
+result$drought_assessment
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+The returned object is a named list with three elements:
 
-You can also embed plots, for example:
+- `data`: the original data, with drought flags and durations added.
+- `drought_events`: only the rows that belong to a detected drought event.
+- `drought_assessment`: one row per event, with its duration, intensity,
+  severity, and timing.
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+### Plot the time series
+
+`plot_drought_ts()` draws the index as a bar plot, coloring positive
+(wet) and negative (dry) periods differently.
+
+```{r plot-ts}
+plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Time Series")
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+You can also aggregate by year:
+
+```{r plot-ts-by-year}
+plot_drought_ts(spei_granada, vname = "spei12", by_year = TRUE)
+```
+
+### Highlight drought events on the plot
+
+`add_drought_events()` overlays the detected events on top of a plot
+created with `plot_drought_ts()`, as shaded bands, vertical lines, or
+both, optionally showing severity labels.
+
+```{r plot-with-events}
+p <- plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Time Series")
+
+p |>
+  add_drought_events(
+    drought_assessment = result$drought_assessment,
+    which_events = "top",
+    metric = "severity",
+    top_n = 5,
+    type = "both",
+    show_severity = TRUE
+  )
+```
+
+## Data
+
+The package ships with `spei_granada`, a monthly SPEI time series
+(6, 12, 24, and 48-month scales) for Granada, Spain, covering 1901-2024.
+See `?spei_granada` for details and the data source.
+
+## References
+
+Vicente-Serrano, S.M., Beguería, S., López-Moreno, J.I. (2010). A
+Multiscalar Drought Index Sensitive to Global Warming: The Standardized
+Precipitation Evapotranspiration Index. *Journal of Climate*, 23(7),
+1696-1718. <https://doi.org/10.1175/2009JCLI2909.1>
+
+## License
+
+<!-- Add your license here, e.g. MIT, GPL-3 -->

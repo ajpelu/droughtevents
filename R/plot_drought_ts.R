@@ -35,9 +35,9 @@
 #' the function averages the index per year and plots one bar per year.
 #'
 #' @examples
-#' data(spei)
-#' plot_drought_ts(spei, vname = "spei12", title = "SPEI-12 Time Series")
-#' plot_drought_ts(spei, vname = "spei12", title = "SPEI-12 Annual Mean", by_year = TRUE)
+#' data(spei_granada)
+#' plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Time Series")
+#' plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Annual Mean", by_year = TRUE)
 #'
 #' @seealso [droughts()]
 #'
@@ -56,18 +56,17 @@ plot_drought_ts <- function(df,
                       zero_line_col = "black",
                       zero_line_linetype = "solid",
                       by_year = FALSE,
-                      y_axis_title = NULL,
-                      ...) {
+                      y_axis_title = NULL) {
 
-  assertthat::assert_that(
-  inherits(df, "data.frame"),
-  msg = "The input must be a data frame or tibble."
-  )
+  if (!inherits(df, "data.frame")) {
+    cli::cli_abort("{.arg df} must be a data frame or tibble.")
+  }
 
-  assertthat::assert_that(
-  vname %in% names(df),
-  msg = paste("Variable", vname, "not found in the data frame.")
-  )
+  if(!vname %in% names(df)) {
+    cli::cli_abort(
+      "Variable {.val {vname}} not found in the data frame."
+    )
+  }
 
   assertthat::assert_that(
     is.numeric(df[[vname]]),

@@ -133,7 +133,8 @@ The package ships with `spei_granada`, a monthly SPEI time series (6,
 Vicente-Serrano, S.M., Beguería, S., López-Moreno, J.I. (2010). A
 Multiscalar Drought Index Sensitive to Global Warming: The Standardized
 Precipitation Evapotranspiration Index. *Journal of Climate*, 23(7),
-1696-1718. <https://doi.org/10.1175/2009JCLI2909.1>
+1696-1718.
+[10.1175/2009JCLI2909.1](https://doi.org/10.1175/2009JCLI2909.1)
 
 ## License
 

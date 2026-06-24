@@ -1,0 +1,15 @@
+url: https://ajpelu.github.io/droughtevents/
+template:
+  bootstrap: 5
+
+reference:
+- title: "Detect drought events"
+  contents:
+  - droughts
+- title: "Visualize drought events"
+  contents:
+  - plot_drought_ts
+  - add_drought_events
+- title: "Data"
+  contents:
+  - spei_granada

@@ -2,7 +2,7 @@
 % Please edit documentation in R/droughts.R
 \name{droughts}
 \alias{droughts}
-\title{Detect and Summarize Drought Events from Droughts Index Time Series}
+\title{Detect and summarize drought events from SPEI droughts index time series}
 \usage{
 droughts(df, vname, threshold, min_duration = 2)
 }
@@ -36,8 +36,8 @@ for at least two consecutive months. Returns the processed dataset, the detected
 and a summary of their characteristics.
 }
 \examples{
-data(spei)
+data(spei_granada)
 # Detect droughts in the SPEI-12 time series with a threshold of -1.28
-droughts_result <- droughts(spei, vname = "spei12", threshold = -1.28)
+droughts_result <- droughts(spei_granada, vname = "spei12", threshold = -1.28)
 
 }

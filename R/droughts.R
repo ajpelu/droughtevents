@@ -1,4 +1,4 @@
-#' @title Detect and Summarize Drought Events from Droughts Index Time Series
+#' @title Detect and summarize drought events from SPEI droughts index time series
 #'
 #' @description
 #' Identifies drought events in a time series when a given index (e.g., SPEI) falls below a specified threshold
@@ -21,13 +21,14 @@
 #' * `drought_assessment`: summary of each event, including duration, intensity, severity, and timing.
 #'
 #' @examples
-#' data(spei)
+#' data(spei_granada)
 #' # Detect droughts in the SPEI-12 time series with a threshold of -1.28
-#' droughts_result <- droughts(spei, vname = "spei12", threshold = -1.28)
+#' droughts_result <- droughts(spei_granada, vname = "spei12", threshold = -1.28)
 #'
 #' @importFrom lubridate make_date
 #' @importFrom dplyr mutate group_by summarise filter ungroup
 #' @importFrom data.table rleid
+#' @importFrom rlang .data
 #' @export
 
 droughts <- function(df, vname, threshold, min_duration = 2) {
@@ -60,16 +61,16 @@ droughts <- function(df, vname, threshold, min_duration = 2) {
         .data[[vname]] < threshold & dplyr::lead(.data[[vname]], default = NA) < threshold,
         1, 0
       ),
-      date = lubridate::make_date(year, month)
+      date = lubridate::make_date(.data$year, .data$month)
     )
 
   events_computation <- aux |>
-    dplyr::group_by(index_events = data.table::rleid(is_drought)) |>
-    dplyr::mutate(drought_duration = sum(is_drought)) |>
+    dplyr::group_by(index_events = data.table::rleid(.data$is_drought)) |>
+    dplyr::mutate(drought_duration = sum(.data$is_drought)) |>
     dplyr::ungroup()
 
   is_drought_event <- events_computation |>
-    dplyr::filter(drought_duration >= min_duration)
+    dplyr::filter(.data$drought_duration >= min_duration)
 
   if (nrow(is_drought_event) == 0) {
     # No events detected, build empty summary with the right columns
@@ -86,19 +87,19 @@ droughts <- function(df, vname, threshold, min_duration = 2) {
     )
   } else {
     da <- is_drought_event |>
-      dplyr::group_by(index_events) |>
+      dplyr::group_by(.data$index_events) |>
       dplyr::summarise(
-        d_duration = unique(drought_duration),
+        d_duration = unique(.data$drought_duration),
         d_intensity = mean(.data[[vname]], na.rm = TRUE),
         d_severity = sum(abs(.data[[vname]]), na.rm = TRUE),
         lowest_spei = min(.data[[vname]]),
-        month_peak = month[which.min(.data[[vname]])],
-        minyear = min(year),
-        maxyear = max(year),
+        month_peak = .data$month[which.min(.data[[vname]])],
+        minyear = min(.data$year),
+        maxyear = max(.data$year),
         rangeDate = paste(
-          format(min(date, na.rm = TRUE), "%b"),
+          format(min(.data$date, na.rm = TRUE), "%b"),
           "-",
-          format(max(date, na.rm = TRUE), "%b")
+          format(max(.data$date, na.rm = TRUE), "%b")
         ),
         .groups = "drop"
       )

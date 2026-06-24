@@ -7,7 +7,7 @@ library(readr)
 
 all <- list.files("data-raw", pattern = "\\.csv$", full.names = FALSE)
 
-spei <- all |>
+spei_granada <- all |>
   purrr::map(~ readr::read_delim(file.path("data-raw", .x), delim = ";", show_col_types = FALSE)) |>
   purrr::reduce(dplyr::full_join, by = "dates") |>
   dplyr::rename(spei6 = spei06,
@@ -15,4 +15,4 @@ spei <- all |>
   dplyr::relocate(spei6, .after = date) |>
   dplyr::filter(!is.na(spei6))
 
-usethis::use_data(spei, overwrite = TRUE)
+usethis::use_data(spei_granada, overwrite = TRUE)

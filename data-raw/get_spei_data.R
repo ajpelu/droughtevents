@@ -1,5 +1,5 @@
 # Go to https://spei.csic.es/spei_database/#map_name=spei06#map_position=1475
-# Download a time series of SPEI6, SPEI12, SPEI24, and SPEI48 for Granada
+# Download a time series of SPEI6, SPEI12, and SPEI24 for Granada
 
 library(dplyr)
 library(purrr)

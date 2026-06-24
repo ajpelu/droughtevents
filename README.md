@@ -84,7 +84,7 @@ The returned object is a named list with three elements:
 ### Plot the time series
 
 `plot_drought_ts()` draws the index as a bar plot, coloring positive
-(wet) and negative (dry) periods differently.
+(wet, *blue*) and negative (dry, *red*) periods differently.
 
 ``` r
 plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Time Series")

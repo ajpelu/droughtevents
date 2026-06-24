@@ -38,7 +38,7 @@ values at the start of the series.
 }
 \examples{
 data(spei_granada)
-head(spei_granada)
+tail(spei_granada)
 
 # Detect drought events using the 12-month SPEI
 droughts(spei_granada, vname = "spei12", threshold = -1.28)

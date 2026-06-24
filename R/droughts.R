@@ -17,7 +17,7 @@
 #'
 #' @return A named list with three elements:
 #' * `data`: the original data frame with drought flags and durations.
-#' * `drought_events`: only the rows that are part of drought events (duration ≥ 2).
+#' * `drought_events`: only the rows that are part of drought events (duration >= `min_duration`).
 #' * `drought_assessment`: summary of each event, including duration, intensity, severity, and timing.
 #'
 #' @examples

@@ -26,7 +26,7 @@ event to be considered a drought. Default is 2.}
 A named list with three elements:
 \itemize{
 \item \code{data}: the original data frame with drought flags and durations.
-\item \code{drought_events}: only the rows that are part of drought events (duration ≥ 2).
+\item \code{drought_events}: only the rows that are part of drought events (duration >= \code{min_duration}).
 \item \code{drought_assessment}: summary of each event, including duration, intensity, severity, and timing.
 }
 }

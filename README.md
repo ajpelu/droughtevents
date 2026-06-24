@@ -103,8 +103,8 @@ plot_drought_ts(spei_granada, vname = "spei12", by_year = TRUE)
 ### Highlight drought events on the plot
 
 `add_drought_events()` overlays the detected events on top of a plot
-created with `plot_drought_ts()`, as shaded bands, vertical lines, or
-both, optionally showing severity labels.
+created with `plot_drought_ts()`, as shaded bands or vertical lines, or
+both.
 
 ``` r
 p <- plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Time Series")
@@ -116,7 +116,7 @@ p |>
     metric = "severity",
     top_n = 5,
     type = "both",
-    show_severity = TRUE
+    show_severity = FALSE
   )
 ```
 

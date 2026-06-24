@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# droughtevents
+## <span style="color:#B35A2E">**dRought**</span><span style="color:#3F6B54">**events**</span> <a href="https://ajpelu.github.io/droughtevents/"><img src="man/figures/logo.png" align="right" width="200" alt="droughtevents website" /></a>
 
 <!-- badges: start -->
 

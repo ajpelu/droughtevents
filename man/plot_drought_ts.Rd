@@ -9,13 +9,12 @@ plot_drought_ts(
   vname,
   title = NULL,
   date_col = "date",
-  pos_col = "blue",
-  neg_col = "red",
-  zero_line_col = "black",
+  pos_color = "blue",
+  neg_color = "red",
+  zero_line_color = "black",
   zero_line_linetype = "solid",
   by_year = FALSE,
-  y_axis_title = NULL,
-  ...
+  y_axis_title = NULL
 )
 }
 \arguments{
@@ -27,19 +26,17 @@ plot_drought_ts(
 
 \item{date_col}{A string. Name of the column containing date information (default is \code{"date"}).}
 
-\item{pos_col}{Color used for positive values (default is \code{"blue"}).}
+\item{pos_color}{Color used for positive values (default is \code{"blue"}).}
 
-\item{neg_col}{Color used for negative values (default is \code{"red"}).}
+\item{neg_color}{Color used for negative values (default is \code{"red"}).}
 
-\item{zero_line_col}{Color of the horizontal line at zero (default is \code{"black"}).}
+\item{zero_line_color}{Color of the horizontal line at zero (default is \code{"black"}).}
 
 \item{zero_line_linetype}{Line type for the horizontal zero line (default is \code{"solid"}).}
 
 \item{by_year}{Logical. If \code{TRUE}, aggregates the drought index by year and plots annual means (default is \code{FALSE}).}
 
 \item{y_axis_title}{Optional label for the y-axis. If \code{NULL}, the name of \code{vname} is used.}
-
-\item{...}{Additional arguments passed to \code{ggplot2::ggplot()}.}
 }
 \value{
 A \code{ggplot} object representing the drought index time series as a bar plot.
@@ -55,9 +52,9 @@ highlighting positive (wet) and negative (dry) periods. When \code{by_year = TRU
 the function averages the index per year and plots one bar per year.
 }
 \examples{
-data(spei)
-plot_drought_ts(spei, vname = "spei12", title = "SPEI-12 Time Series")
-plot_drought_ts(spei, vname = "spei12", title = "SPEI-12 Annual Mean", by_year = TRUE)
+data(spei_granada)
+plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Time Series")
+plot_drought_ts(spei_granada, vname = "spei12", title = "SPEI-12 Annual Mean", by_year = TRUE)
 
 }
 \seealso{

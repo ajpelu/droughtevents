@@ -80,3 +80,24 @@ add_drought_events(
 ## Value
 
 A modified `ggplot` object.
+
+## Examples
+
+``` r
+data(spei_granada)
+
+result <- droughts(spei_granada, vname = "spei12", threshold = -1.28)
+
+p <- plot_drought_ts(spei_granada, vname = "spei12")
+
+add_drought_events(
+  p,
+  drought_assessment = result$drought_assessment,
+  which_events = "top",
+  metric = "severity",
+  top_n = 3,
+  type = "both",
+  show_severity = TRUE
+)
+
+```

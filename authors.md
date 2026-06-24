@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/ajpelu/droughtevents/blob/master/DESCRIPTION)
 
 Perez-Luque A (2026). *droughtevents: Identify and Characterize Drought
-Events from Drought Index Time Series*. R package version 0.0.0.9000,
+Events from Drought Index Time Series*. R package version 0.1.0,
 <https://github.com/ajpelu/droughtevents>.
 
     @Manual{,
       title = {droughtevents: Identify and Characterize Drought Events from Drought Index Time Series},
       author = {Antonio Jesus Perez-Luque},
       year = {2026},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 0.1.0},
       url = {https://github.com/ajpelu/droughtevents},
     }

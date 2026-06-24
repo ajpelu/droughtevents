@@ -49,6 +49,10 @@ A data frame (tibble) with 1,483 rows and 5 columns:
 
 <https://spei.csic.es/spei_database/>
 
+## Value
+
+A `tibble` with 1,483 rows and 5 columns, as described in `@format`.
+
 ## References
 
 Vicente-Serrano, S.M., Beguería, S., López-Moreno, J.I. (2010). A

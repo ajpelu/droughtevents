@@ -51,3 +51,21 @@ Adds shaded polygons, vertical lines, or both to a \code{ggplot} object to highl
 based on a drought assessment summary (as returned by \code{droughts()}). Optionally,
 labels or points can be added to indicate drought severity.
 }
+\examples{
+data(spei_granada)
+
+result <- droughts(spei_granada, vname = "spei12", threshold = -1.28)
+
+p <- plot_drought_ts(spei_granada, vname = "spei12")
+
+add_drought_events(
+  p,
+  drought_assessment = result$drought_assessment,
+  which_events = "top",
+  metric = "severity",
+  top_n = 3,
+  type = "both",
+  show_severity = TRUE
+)
+
+}

@@ -24,6 +24,9 @@ months of the series.}
 \usage{
 spei_granada
 }
+\value{
+A \code{tibble} with 1,483 rows and 5 columns, as described in \verb{@format}.
+}
 \description{
 Standardised Precipitation-Evapotranspiration Index (SPEI) time series
 for Granada, Spain (coordinates -3.75, 37.25), at four different time

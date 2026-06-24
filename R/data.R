@@ -25,6 +25,8 @@
 #'   months of the series.}
 #' }
 #'
+#' @return A `tibble` with 1,483 rows and 5 columns, as described in `@format`.
+#'
 #' @source \url{https://spei.csic.es/spei_database/}
 #'
 #' @references

@@ -4,11 +4,11 @@ Version: 0.1.0
 Authors@R: 
     person("Antonio Jesus", "Perez-Luque", , "ajpelu@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0002-1747-0469"))
-Description: Description: Detects, describes, and analyzes drought events from time series
-    of drought indices (e.g. SPEI, SPI). Identifies drought episodes based on
-    threshold values and calculates their duration, intensity, severity, and
-    peak month. Includes utilities for summarizing and visualizing drought
-    dynamics over time. The Standardized Precipitation-Evapotranspiration
+Description: Detects, describes, and analyzes drought events from time series
+    of drought indices, such as the Standardized Precipitation-Evapotranspiration
+    Index (SPEI). Identifies drought episodes based on threshold values and calculates 
+    their duration, intensity, severity, and peak month. Includes utilities for summarizing
+    and visualizing drought dynamics over time. The Standardized Precipitation-Evapotranspiration
     Index is described in Vicente-Serrano et al. (2010) 
     <doi:10.1175/2009JCLI2909.1>.
 License: MIT + file LICENSE

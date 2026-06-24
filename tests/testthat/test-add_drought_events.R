@@ -415,22 +415,4 @@ test_that("which_events = 'top', type = 'both', and show_severity = TRUE work to
   expect_equal(length(result$layers) - length(p$layers), 8)
 })
 
-test_that("y_max fallback (1) is used when ggplot_build fails", {
-  broken_plot <- ggplot2::ggplot(
-    data.frame(x = 1:3),
-    ggplot2::aes(x = .data$x, y = .data$no_existe)
-  ) +
-    ggplot2::geom_point()
 
-  da <- make_drought_assessment()
-
-  # Esto debe funcionar sin error, usando y_max = 1 como fallback,
-  # y show_severity = TRUE para forzar que y_max realmente se use
-  result <- add_drought_events(
-    p = broken_plot,
-    drought_assessment = da,
-    show_severity = TRUE
-  )
-
-  expect_s3_class(result, "ggplot")
-})

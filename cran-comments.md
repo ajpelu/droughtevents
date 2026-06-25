@@ -15,7 +15,9 @@
 * macOS builder (r-release-macosx-arm64, R 4.6.0, via mac.r-project.org)
   -- Status: OK (0 errors | 0 warnings | 0 notes).
 * win-builder (R-devel), via `devtools::check_win_devel()`
-  -- [pendiente: añade el resultado cuando llegue el email]
+  -- Status: 1 NOTE (New submission; possibly misspelled words flagged are
+  correct: a scientific term, an index acronym, and standard Latin
+  citation abbreviations).
 
 ## Downstream dependencies
 
